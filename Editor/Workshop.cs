@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
-
+using UnityEngine.SceneManagement;
 public class Workshop : EditorWindow
 {
     [MenuItem("My Custom Widgets/Workshop")]
@@ -28,6 +28,8 @@ public class Workshop : EditorWindow
     private int LastIndex = 0;
     private int saveIndex = 0;
 
+    Dictionary<string,GameObject> sceneInactiveGO = new Dictionary<string, GameObject>();
+
     // Bug Fix: Empty First Save after Build
     // Putting On Window Reset Loading in OnEnable instead of Awake
     private void OnEnable()
@@ -40,7 +42,12 @@ public class Workshop : EditorWindow
             savesNameList.Add(System.Text.RegularExpressions.Regex.Replace(AssetDatabase.GUIDToAssetPath(saveList[i]), "([0-9A-z ]*/)*", "").Replace(".asset", ""));
         }
         tContainer = defaultSave.stContainer;
-        inactiveElements = defaultSave.sInactiveElements;
+
+        GetSceneInactiveGameObjs(sceneInactiveGO);
+        foreach(string goName in tContainer)
+        {
+            if(sceneInactiveGO.ContainsKey(goName) && !inactiveElements.ContainsKey(goName)) { inactiveElements[goName] = sceneInactiveGO[goName];}
+        }
     }
 
     public void Awake()
@@ -102,7 +109,6 @@ public class Workshop : EditorWindow
         for (int i = 0; i < tContainer.Count; i++)
         {
             GUI.SetNextControlName("b" + i.ToString());
-            Debug.Log(tContainer[i]+"s");
             addElement(tContainer[i], i);
         }
         if (GUI.Button(new Rect(Screen.width - 45, 2, 75, 25), "Clear", clearButtonGUIStyle))
@@ -196,10 +202,28 @@ public class Workshop : EditorWindow
             Event.current.Use();
         }
     }
+
+    private void GetSceneInactiveGameObjs(Dictionary<string, GameObject> sceneInactiveGO)
+    {
+        List<GameObject> inactiveGO = new List<GameObject>();
+
+        //for Active Scene
+        SceneManager.GetActiveScene().GetRootGameObjects(inactiveGO);
+
+        foreach (GameObject go in inactiveGO)
+        {
+            foreach (Transform child in go.GetComponentsInChildren<Transform>(true) ) //Include Inactive Childs
+            {
+                if (!(child.gameObject.activeSelf)) { sceneInactiveGO[child.gameObject.name] = child.gameObject;}
+            }
+        }
+    }
+
+    //FirstDraft
     private void checkDragable()
     {
         GameObject ele = new GameObject();
-        Event e= Event.current;
+        Event e = Event.current;
         if ((e.type == EventType.MouseDrag))
         {
             //StartDrag();
@@ -231,4 +255,5 @@ DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
         }
 
     }
+
 }
