@@ -7,9 +7,6 @@ public class Workshop : EditorWindow
     [MenuItem("My Custom Widgets/Workshop")]
     public static void ShowWindow() { GetWindow<Workshop>("Workshop");}
 
-    //std::ofstream
-   
-
 //public WorkshopElementsScriptableObj defaultSave;
 
     public Font myfont;
@@ -18,18 +15,33 @@ public class Workshop : EditorWindow
     public GUIStyle offButtonGUIStyle;
     public GUIStyle clearButtonGUIStyle;
 
-    private static List<string> tContainer = new List<string>();
+    [SerializeField] private static List<string> tContainer = new List<string>();
     private Dictionary <string,GameObject> inactiveElements = new Dictionary<string, GameObject>();
 
     private bool isAdding = false;
     private int tempInt = 0;
 
-    public string[] saveList;
-    public WorkshopElementsScriptableObj defaultSave;
+    private string[] saveList;
+    [SerializeField] private WorkshopElementsScriptableObj defaultSave;
 
     private List<string> savesNameList = new List<string>();
     private int LastIndex = 0;
     private int saveIndex = 0;
+
+    // Bug Fix: Empty First Save after Build
+    // Putting On Window Reset Loading in OnEnable instead of Awake
+    private void OnEnable()
+    {
+        saveList = AssetDatabase.FindAssets("t: WorkshopElementsScriptableObj");
+        defaultSave = AssetDatabase.LoadAssetAtPath<WorkshopElementsScriptableObj>(AssetDatabase.GUIDToAssetPath(saveList[saveIndex]));
+
+        for (int i = 0; i < saveList.Length; i++)
+        {
+            savesNameList.Add(System.Text.RegularExpressions.Regex.Replace(AssetDatabase.GUIDToAssetPath(saveList[i]), "([0-9A-z ]*/)*", "").Replace(".asset", ""));
+        }
+        tContainer = defaultSave.stContainer;
+        inactiveElements = defaultSave.sInactiveElements;
+    }
 
     public void Awake()
     {
@@ -57,29 +69,17 @@ public class Workshop : EditorWindow
         clearButtonGUIStyle.fontSize = 16;
         //clearButtonGUIStyle.alignment = TextAnchor.MiddleCenter;
 
-        /*if (saveList.Length == 0) { }
-        else
-        {
-            tContainer = defaultSave.stContainer;
-            inactiveElements = defaultSave.sInactiveElements;
-        }
-        //tContainer =*/
-        saveList = AssetDatabase.FindAssets("t: WorkshopElementsScriptableObj");
-        defaultSave = AssetDatabase.LoadAssetAtPath<WorkshopElementsScriptableObj>(AssetDatabase.GUIDToAssetPath(saveList[0]));
-        tContainer = defaultSave.stContainer;
-        inactiveElements = defaultSave.sInactiveElements;
-        for(int i = 0; i < saveList.Length; i++)
-        {
-            savesNameList.Add(System.Text.RegularExpressions.Regex.Replace(AssetDatabase.GUIDToAssetPath(saveList[i]), "([0-9A-z ]*/)*", "").Replace(".asset", ""));
-        }
-        
-        //for (int i = 0; i < saveList.Length ; i++) { savesNameList.Add(AssetDatabase.GUIDToAssetPath()); }
-
     }
     void OnDestroy()
     {   
         defaultSave.stContainer = tContainer;
         defaultSave.sInactiveElements = inactiveElements;
+
+        //BugFix: Saving for Editor restart
+        //BugFix: Saving On Compile Solution
+        EditorUtility.SetDirty(defaultSave);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
     private void OnGUI()
     {
@@ -90,6 +90,9 @@ public class Workshop : EditorWindow
         {
             defaultSave.stContainer = tContainer;
             defaultSave.sInactiveElements = inactiveElements;
+            EditorUtility.SetDirty(defaultSave);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
             defaultSave = AssetDatabase.LoadAssetAtPath<WorkshopElementsScriptableObj>(AssetDatabase.GUIDToAssetPath(saveList[saveIndex]));
             tContainer = defaultSave.stContainer;
             inactiveElements = defaultSave.sInactiveElements;
@@ -99,6 +102,7 @@ public class Workshop : EditorWindow
         for (int i = 0; i < tContainer.Count; i++)
         {
             GUI.SetNextControlName("b" + i.ToString());
+            Debug.Log(tContainer[i]+"s");
             addElement(tContainer[i], i);
         }
         if (GUI.Button(new Rect(Screen.width - 45, 2, 75, 25), "Clear", clearButtonGUIStyle))
@@ -124,7 +128,7 @@ public class Workshop : EditorWindow
         
         if (isAdding && Event.current.keyCode == KeyCode.Return && !(Event.current.type == EventType.KeyUp))
         {
-            if (GameObject.Find(tContainer[tempInt]) == null) { tContainer.RemoveAt(tempInt);}
+            if (GameObject.Find(tContainer[tempInt]) == null || inactiveElements.ContainsKey(tContainer[tempInt])) { tContainer.RemoveAt(tempInt);}
             else
             {
                 GUI.SetNextControlName("b" + (tempInt).ToString());
@@ -152,10 +156,8 @@ public class Workshop : EditorWindow
             if (!((inactiveElements[elementName]).activeSelf))
             {
                 //Debug.Log("btata");
-                if (GUI.Button(new Rect(10, 25 * i + 30, Screen.width - 35, 20), elementName, offButtonGUIStyle)) { Selection.activeGameObject = inactiveElements[elementName] as GameObject; }
-                if (GUI.Button(new Rect(Screen.width - 25, 25 * i + 30, 20, 20), (Texture)AssetDatabase.LoadAssetAtPath("Assets/My Editor/Editor/x.png", typeof(Texture)), EditorStyles.miniButton)) { tContainer.RemoveAt(i); }
-
-
+                if (GUI.Button(new Rect(10, 25 * i + 30, Screen.width - 35, 20), elementName, offButtonGUIStyle)) { Selection.activeGameObject = inactiveElements[elementName];}
+                if (GUI.Button(new Rect(Screen.width - 25, 25 * i + 30, 20, 20), (Texture)AssetDatabase.LoadAssetAtPath("Assets/My Editor/Editor/x.png", typeof(Texture)), EditorStyles.miniButton)) { tContainer.RemoveAt(i);}
             }
         }
         /*        if 
@@ -180,13 +182,16 @@ public class Workshop : EditorWindow
             {
                 GUI.SetNextControlName("t" + (tempInt).ToString());
                 tContainer.Add((DragAndDrop.objectReferences[0]).name);
-                inactiveElements[DragAndDrop.objectReferences[0].name] = (GameObject)(DragAndDrop.objectReferences[0]);
+                //inactiveElements[DragAndDrop.objectReferences[0].name] = (GameObject)(DragAndDrop.objectReferences[0]);
+                
                 //if (!((DragAndDrop.objectReferences[0] as GameObject).activeSelf)) { inactiveDraggedElement = true;}
                 //else { inactiveDraggedElement = false;}
                 //GUI.SetNextControlName("b" + (tempInt).ToString());
                 //addElement(tContainer[tempInt], tempInt);
                 //Repaint();
                 DragAndDrop.AcceptDrag();
+                inactiveElements[DragAndDrop.objectReferences[0].name] = (GameObject)(DragAndDrop.objectReferences[0]);
+                if (inactiveElements[DragAndDrop.objectReferences[0].name].activeSelf) { inactiveElements.Remove(DragAndDrop.objectReferences[0].name); }
             }
             Event.current.Use();
         }
