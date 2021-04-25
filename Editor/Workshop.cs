@@ -27,6 +27,8 @@ public class Workshop : EditorWindow
     private List<string> savesNameList = new List<string>();
     private int LastIndex = 0;
     private int saveIndex = 0;
+    
+    private Vector2 scrollPosition;
 
     Dictionary<string,GameObject> sceneInactiveGO = new Dictionary<string, GameObject>();
 
@@ -105,12 +107,13 @@ public class Workshop : EditorWindow
             inactiveElements = defaultSave.sInactiveElements;
             LastIndex = saveIndex;
         }
-
+        scrollPosition = GUI.BeginScrollView(new Rect(Screen.width-1,20,0,Screen.height-60),scrollPosition,new Rect(0,0,Screen.width, Screen.height-80),false,false,GUIStyle.none,GUI.skin.verticalScrollbar);
         for (int i = 0; i < tContainer.Count; i++)
         {
             GUI.SetNextControlName("b" + i.ToString());
             addElement(tContainer[i], i);
         }
+        GUI.EndScrollView();
         if (GUI.Button(new Rect(Screen.width - 45, 2, 75, 25), "Clear", clearButtonGUIStyle))
         {
             inactiveElements.Clear();
