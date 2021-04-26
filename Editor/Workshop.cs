@@ -154,7 +154,7 @@ public class Workshop : EditorWindow
             if (GameObject.Find(elementName).activeSelf)
             {
                 if (GUI.Button(new Rect(10, 25 * i + 30, Screen.width - 35, 20), elementName, onButtonGUIStyle)) { Selection.activeGameObject = GameObject.Find(elementName); }
-                if (GUI.Button(new Rect(Screen.width - 25, 25 * i + 30, 20, 20), (Texture)AssetDatabase.LoadAssetAtPath("Assets/Workshop/Editor/x.png",typeof(Texture)), EditorStyles.miniButton)) { tContainer.RemoveAt(i); }
+                if (GUI.Button(new Rect(Screen.width - 35, 25 * i + 30, 20, 20), (Texture)AssetDatabase.LoadAssetAtPath("Assets/Workshop/Editor/x.png",typeof(Texture)), EditorStyles.miniButton)) { tContainer.RemoveAt(i); }
             }
         }
         else if(inactiveElements.ContainsKey(elementName))
@@ -162,7 +162,7 @@ public class Workshop : EditorWindow
             if (!((inactiveElements[elementName]).activeSelf))
             {
                 if (GUI.Button(new Rect(10, 25 * i + 30, Screen.width - 35, 20), elementName, offButtonGUIStyle)) { Selection.activeGameObject = inactiveElements[elementName];}
-                if (GUI.Button(new Rect(Screen.width - 25, 25 * i + 30, 20, 20), (Texture)AssetDatabase.LoadAssetAtPath("Assets/Workshop/Editor/x.png", typeof(Texture)), EditorStyles.miniButton)) { tContainer.RemoveAt(i);}
+                if (GUI.Button(new Rect(Screen.width - 35, 25 * i + 30, 20, 20), (Texture)AssetDatabase.LoadAssetAtPath("Assets/Workshop/Editor/x.png", typeof(Texture)), EditorStyles.miniButton)) { tContainer.RemoveAt(i);}
             }
         }
     }
