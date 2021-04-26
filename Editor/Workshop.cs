@@ -107,7 +107,7 @@ public class Workshop : EditorWindow
             inactiveElements = defaultSave.sInactiveElements;
             LastIndex = saveIndex;
         }
-        scrollPosition = GUI.BeginScrollView(new Rect(Screen.width-1,20,0,Screen.height-60),scrollPosition,new Rect(0,0,100,1300),false,false);
+        scrollPosition = GUI.BeginScrollView(new Rect(0, 20, Screen.width, Screen.height - 60), scrollPosition, new Rect(0, 0, Screen.width, tContainer.Count * 25 + 30), false, false, GUIStyle.none, GUI.skin.verticalScrollbar);
         for (int i = 0; i < tContainer.Count; i++)
         {
             GUI.SetNextControlName("b" + i.ToString());
@@ -221,42 +221,4 @@ public class Workshop : EditorWindow
             }
         }
     }
-
-    //FirstDraft
-    private void checkDragable()
-    {
-        GameObject ele = new GameObject();
-        Event e = Event.current;
-        if ((e.type == EventType.MouseDrag))
-        {
-            //StartDrag();
-
-            // Use the event, else the drag won't start
-
-            e.Use();
-        }
-        if ( (Event.current.type == EventType.DragUpdated) && (new Rect(10, 25 * tContainer.Count + 30, Screen.width - 20, Screen.height - (25 * tContainer.Count + 30))).Contains(Event.current.mousePosition) )
-        {
-            
-
-            if (DragAndDrop.GetGenericData("GameObject") == null)
-            {
-                DragAndDrop.SetGenericData("GameObject", ele);
-            }
-
-            Event.current.Use();
-        }
-
-        if (Event.current.type == EventType.DragPerform
-            && (Event.current.type == EventType.DragUpdated) && (new Rect(10, 25 * tContainer.Count + 30, Screen.width - 20, Screen.height - (25 * tContainer.Count + 30))).Contains(Event.current.mousePosition) )
-        {
-DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-            tContainer[tempInt] = GUI.TextField(new Rect(10, 25 * tempInt + 30, Screen.width - 20, 20), tContainer[tempInt], 40);
-            GUI.SetNextControlName("b" + (tempInt).ToString());
-            addElement(tContainer[tempInt], tempInt);
-            Repaint();
-        }
-
-    }
-
 }
