@@ -1,2 +1,17 @@
 Next Version
-- Design and Responsiveness Improvment
+
+#Feature Added
+- Making Stack of Elements Draggable at Once
+- Accepting GameObjects from All Open Scenes in Hierarchy
+
+#BugFixes
+
+//BugFix: Buttons Disappear when All Saves Deleted
+//BugFix: No Update of SaveList when New Save Created
+//BugFix: Active GameObject disappear when desactivated in Inspector after the Worshop was already Open
+//BugFix: Instant Buttons Color Change if Activated or Desactivated in Inspector
+//BugFix: Buttons Disappear when a currently open Save is Deleted
+//Bug Fix: Scroll doesn't include the TextField
+//BugFix: Inactive buttons Removed after Enter Hit
+//BugFix: Buttons Disappear when Inactive Element in List Deleted in Hierarchy
+//BugFix: No Delete Button if GameObjs isn't in LoadedScenes or is Deleted from Hierarchy
