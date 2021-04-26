@@ -1,6 +1,6 @@
 
 # Workshop
-A Drag and Drop Unity Editor Tool to quickly select GameObjects instead of the Hierarchy default Inspector
+A Drag and Drop Unity Editor Tool to quickly select GameObjects and Organize them as SaveLists instead of the Hierarchy default Inspector
 
 ![](./Workshop.png)
 
