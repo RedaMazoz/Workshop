@@ -107,7 +107,7 @@ public class Workshop : EditorWindow
             inactiveElements = defaultSave.sInactiveElements;
             LastIndex = saveIndex;
         }
-        scrollPosition = GUI.BeginScrollView(new Rect(Screen.width-1,20,0,Screen.height-60),scrollPosition,new Rect(0,0,Screen.width, Screen.height-80),false,false,GUIStyle.none,GUI.skin.verticalScrollbar);
+        scrollPosition = GUI.BeginScrollView(new Rect(Screen.width-1,20,0,Screen.height-60),scrollPosition,new Rect(0,0,100,1300),false,false);
         for (int i = 0; i < tContainer.Count; i++)
         {
             GUI.SetNextControlName("b" + i.ToString());
