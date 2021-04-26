@@ -2,7 +2,7 @@
 # Workshop
 A Drag and Drop Unity Editor Tool to quickly select GameObjects instead of the Hierarchy default Inspector
 
-![](./Workshop.jpg)
+![](./Workshop.png)
 
 # How To Use
 - You can Drag GameObjects you're Using in Workshop from the Hierarchy
