@@ -7,8 +7,6 @@ public class Workshop : EditorWindow
     [MenuItem("My Custom Widgets/Workshop")]
     public static void ShowWindow() { GetWindow<Workshop>("Workshop");}
 
-//public WorkshopElementsScriptableObj defaultSave;
-
     public Font myfont;
     public GUIStyle addButtonGUIStyle;
     public GUIStyle onButtonGUIStyle;
@@ -58,25 +56,25 @@ public class Workshop : EditorWindow
         addButtonGUIStyle.font = myfont;
         addButtonGUIStyle.normal.textColor = Color.white;
         addButtonGUIStyle.fontSize = 30;
+        
         onButtonGUIStyle = new GUIStyle();
         onButtonGUIStyle.font = myfont;
         onButtonGUIStyle.normal.textColor = Color.white;
         onButtonGUIStyle.fontSize = 20;
         onButtonGUIStyle.fontStyle = FontStyle.Bold;
         onButtonGUIStyle.alignment = TextAnchor.MiddleCenter;
-        //onButtonGUIStyle.border = new RectOffset(3, 3, 2, 2);
+
         offButtonGUIStyle = new GUIStyle();
         offButtonGUIStyle.font = myfont;
         offButtonGUIStyle.normal.textColor = Color.grey;
         offButtonGUIStyle.fontSize = 20;
         offButtonGUIStyle.fontStyle = FontStyle.Bold;
         offButtonGUIStyle.alignment = TextAnchor.MiddleCenter;
-        //offButtonGUIStyle.border = new RectOffset(3, 3, 2, 2);
+        
         clearButtonGUIStyle = new GUIStyle();
         clearButtonGUIStyle.font = myfont;
         clearButtonGUIStyle.normal.textColor = Color.red;
         clearButtonGUIStyle.fontSize = 16;
-        //clearButtonGUIStyle.alignment = TextAnchor.MiddleCenter;
 
     }
     void OnDestroy()
@@ -142,7 +140,6 @@ public class Workshop : EditorWindow
             {
                 GUI.SetNextControlName("b" + (tempInt).ToString());
                 addElement(tContainer[tempInt], tempInt);
-                //tContainer.RemoveAt(int.Parse(GUI.GetNameOfFocusedControl().Replace("t",""))) ;
                 isAdding = false;
                 Repaint();
             }
@@ -164,19 +161,11 @@ public class Workshop : EditorWindow
         {
             if (!((inactiveElements[elementName]).activeSelf))
             {
-                //Debug.Log("btata");
                 if (GUI.Button(new Rect(10, 25 * i + 30, Screen.width - 35, 20), elementName, offButtonGUIStyle)) { Selection.activeGameObject = inactiveElements[elementName];}
                 if (GUI.Button(new Rect(Screen.width - 25, 25 * i + 30, 20, 20), (Texture)AssetDatabase.LoadAssetAtPath("Assets/Workshop/Editor/x.png", typeof(Texture)), EditorStyles.miniButton)) { tContainer.RemoveAt(i);}
             }
         }
-        /*        if 
-                {
-                    if (GUI.Button(new Rect(10, 25 * i + 30, Screen.width - 20, 20), elementName, offButtonGUIStyle)) { Selection.activeGameObject = inactiveElements; }
-                    //inactiveDraggedElement = false;
-                }
-        */
     }
-    //{ Selection.activeGameObject = GameObject.Find(elementName); }
 
     private void dragg()
     {
@@ -191,13 +180,6 @@ public class Workshop : EditorWindow
             {
                 GUI.SetNextControlName("t" + (tempInt).ToString());
                 tContainer.Add((DragAndDrop.objectReferences[0]).name);
-                //inactiveElements[DragAndDrop.objectReferences[0].name] = (GameObject)(DragAndDrop.objectReferences[0]);
-                
-                //if (!((DragAndDrop.objectReferences[0] as GameObject).activeSelf)) { inactiveDraggedElement = true;}
-                //else { inactiveDraggedElement = false;}
-                //GUI.SetNextControlName("b" + (tempInt).ToString());
-                //addElement(tContainer[tempInt], tempInt);
-                //Repaint();
                 DragAndDrop.AcceptDrag();
                 inactiveElements[DragAndDrop.objectReferences[0].name] = (GameObject)(DragAndDrop.objectReferences[0]);
                 if (inactiveElements[DragAndDrop.objectReferences[0].name].activeSelf) { inactiveElements.Remove(DragAndDrop.objectReferences[0].name); }
