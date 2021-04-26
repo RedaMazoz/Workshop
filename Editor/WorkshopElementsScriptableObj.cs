@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "WorshopElements", menuName = "Workshop/Elements", order = 1)]
+[CreateAssetMenu(fileName = "WorshopElements", menuName = "Workshop/New Save", order = 1)]
 
 public class WorkshopElementsScriptableObj : ScriptableObject
 {
