@@ -4,6 +4,10 @@ A Drag and Drop Unity Editor Tool to quickly select GameObjects and Organize the
 
 ![](./Workshop.png)
 
+# How To Install
+
+simply download the project and put it into your Assets Directory inside your Unity Project
+
 # How To Use
 - You can Drag GameObjects you're Using in Workshop from the Hierarchy
 - You can write only the Exact Name of the GameObject (if it's short but takes time to find) and hit Enter
