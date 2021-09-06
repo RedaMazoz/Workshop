@@ -12,7 +12,7 @@ public class Workshop : EditorWindow
     public GUIStyle addButtonGUIStyle;
     public GUIStyle onButtonGUIStyle;
     public GUIStyle offButtonGUIStyle;
-    public GUIStyle clearButtonGUISt    yle;
+    public GUIStyle clearButtonGUIStyle;
 
     [SerializeField] private static List<string> tContainer = new List<string>();
     [SerializeField] private Dictionary <string,GameObject> inactiveElements = new Dictionary<string, GameObject>();
